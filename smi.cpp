@@ -1,14 +1,14 @@
 #include "Arduino.h"
-#include "Smi.h"
+#include "smi.h"
 
-Smi::Smi(int clockPin, int dataPin) {
+SMI::SMI(int clockPin, int dataPin) {
 	pinMode(clockPin, OUTPUT);
-	_clockPin = clockPin;
 	pinMode(dataPin, OUTPUT);
+	_clockPin = clockPin;
 	_dataPin = dataPin;
 }
 
-void Smi::write(byte HB, byte LB, byte target[]) {
+void SMI::write(byte HB, byte LB, byte target[]) {
 	//common_routine(); 
 	start();
 	//OP code
@@ -18,7 +18,7 @@ void Smi::write(byte HB, byte LB, byte target[]) {
 	sendData(target, 2);
 }
 
-void Smi::read(byte HB, byte LB, byte target[]) {
+void SMI::read(byte HB, byte LB, byte target[]) {
 	start();
 	//OP code
 	opRead();
@@ -27,12 +27,12 @@ void Smi::read(byte HB, byte LB, byte target[]) {
 	getData(target, 2);
 }
 
-void Smi::clockPulse() {
+void SMI::clockPulse() {
    digitalWrite (_clockPin, HIGH);
    digitalWrite (_clockPin, LOW);  
 }
 
-void Smi::start() {
+void SMI::start() {
   //Preamble
    digitalWrite (_dataPin, HIGH);
    for (int smi_i=0; smi_i<32; smi_i++) {
@@ -45,7 +45,7 @@ void Smi::start() {
     clockPulse();
  }
  
-void Smi::opRead() {
+void SMI::opRead() {
   //data=10
    digitalWrite (_dataPin, HIGH);
     clockPulse();
@@ -53,7 +53,7 @@ void Smi::opRead() {
     clockPulse();
 }
 
-void Smi::opWrite() {
+void SMI::opWrite() {
   //data=01
    digitalWrite (_dataPin, LOW);
     clockPulse();
@@ -61,7 +61,7 @@ void Smi::opWrite() {
     clockPulse();
 }
 
-void Smi::putAddress(byte HB, byte LB) {
+void SMI::putAddress(byte HB, byte LB) {
 	int smi_i;
   for (smi_i=1; smi_i>=0; smi_i--){
       if ((HB &(1<<smi_i))==0) {
@@ -81,19 +81,19 @@ void Smi::putAddress(byte HB, byte LB) {
   }
 }
 
-void Smi::readTurnA() {
+void SMI::readTurnA() {
   pinMode(_dataPin, INPUT);
   clockPulse();
 }
 
-void Smi::writeTurnA() {
+void SMI::writeTurnA() {
   digitalWrite (_dataPin, HIGH);
   clockPulse();
   digitalWrite (_dataPin, LOW);
   clockPulse();
 }
 
-void Smi::getData(byte target[], int arraySize) {
+void SMI::getData(byte target[], int arraySize) {
 	int smi_i, smi_j;
   for (smi_j=0; smi_j<2; smi_j++) {
     target[smi_j]=0; // reset data array    
@@ -109,7 +109,7 @@ void Smi::getData(byte target[], int arraySize) {
   digitalWrite(_dataPin,HIGH);
 }
 
-void Smi::sendData(byte target[], int arraySize) {
+void SMI::sendData(byte target[], int arraySize) {
 	int smi_i, smi_j;
   for (smi_j=0; smi_j<arraySize; smi_j++) {
     for (smi_i=7; smi_i>=0; smi_i--) {

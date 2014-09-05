@@ -1,14 +1,13 @@
 /*
 
 */
-#ifndef Smi_h
-#define Smi_h
+#ifndef smi_h
+#define smi_h
 #include "Arduino.h"
 
-class Smi {
+class SMI {
 	public:
-
-		Smi(int clockPin, int dataPin);
+		SMI(int clockPin, int dataPin);
 		void read(byte HB, byte LB, byte target[]);
 		void write(byte HB, byte LB, byte target[]);
 	private:
