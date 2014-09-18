@@ -1,3 +1,14 @@
+/*
+	Davicom Products SMI access library
+	Author: Russell Liu
+	Copyright: GPL V2
+	
+	This library provide a SMI access to read/write register 
+	from/to the DMavicom products with SMI.
+	
+	2014-9-18 <russell_liu@davicom.com.tw>
+*/
+
 #include "Arduino.h"
 #include "smi.h"
 
@@ -9,12 +20,11 @@ SMI::SMI(int clockPin, int dataPin) {
 }
 
 void SMI::write(byte HB, byte LB, byte target[]) {
-	//common_routine(); 
 	start();
 	//OP code
 	opWrite();
-	putAddress(HB, LB);   //send byte
-	writeTurnA();
+	putAddress(HB, LB);     //send register address
+	writeTurnA();			
 	sendData(target, 2);
 }
 
@@ -22,16 +32,18 @@ void SMI::read(byte HB, byte LB, byte target[]) {
 	start();
 	//OP code
 	opRead();
-	putAddress(HB, LB);   //send byte
-	readTurnA();
+	putAddress(HB, LB);  	//send register address
+	readTurnA();			
 	getData(target, 2);
 }
 
+// used to send a clock on clock pin
 void SMI::clockPulse() {
    digitalWrite (_clockPin, HIGH);
    digitalWrite (_clockPin, LOW);  
 }
 
+// Preamble + SFD
 void SMI::start() {
   //Preamble
    digitalWrite (_dataPin, HIGH);
@@ -61,6 +73,7 @@ void SMI::opWrite() {
     clockPulse();
 }
 
+// Send register address
 void SMI::putAddress(byte HB, byte LB) {
 	int smi_i;
   for (smi_i=1; smi_i>=0; smi_i--){
