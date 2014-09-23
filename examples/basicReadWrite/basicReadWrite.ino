@@ -36,18 +36,18 @@ void loop() {
            resort(temp, 4);
            phyaddrHB=(temp[0]<<4)+temp[1];
            phyaddrLB=(temp[2]<<4)+temp[3];
-           print0(phyaddrHB);
-           print0(phyaddrLB);
+           printFullHex(phyaddrHB);
+           printFullHex(phyaddrLB);
            Serial.println();           
            Serial.println("reading...");
            smi.read(phyaddrHB, phyaddrLB, rData); //this function reads the number from the external eeprom
            Serial.print("from Register ");
-           print0(phyaddrHB);
-           print0(phyaddrLB);
+           printFullHex(phyaddrHB);
+           printFullHex(phyaddrLB);
            Serial.println();           
            Serial.print("value is ");
            for (i=0; i<2; i++) {
-             print0(rData[i]);
+             printFullHex(rData[i]);
            }
            Serial.println();
            Serial.println();
@@ -62,8 +62,8 @@ void loop() {
            resort(temp, 4);
            phyaddrHB=(temp[0]<<4)+temp[1];
            phyaddrLB=(temp[2]<<4)+temp[3];
-           print0(phyaddrHB);
-           print0(phyaddrLB);
+           printFullHex(phyaddrHB);
+           printFullHex(phyaddrLB);
            Serial.println();  
            Serial.print("Please input the register value:");
            while(Serial.available() == 0){} // wait input   
@@ -72,23 +72,23 @@ void loop() {
            resort(temp, 4);
            wData[0]=(temp[0]<<4)+temp[1];
            wData[1]=(temp[2]<<4)+temp[3];
-           print0(wData[0]);
-           print0(wData[1]);
+           printFullHex(wData[0]);
+           printFullHex(wData[1]);
            Serial.println();       
            Serial.println("writing...");
            smi.write(phyaddrHB, phyaddrLB, wData); //this function reads the number from the external eeprom
            Serial.print("to Register ");
-           print0(phyaddrHB);
-           print0(phyaddrLB);
+           printFullHex(phyaddrHB);
+           printFullHex(phyaddrLB);
            Serial.println();  
            Serial.print("with value, ");
-           print0(wData[0]);
-           print0(wData[1]);
+           printFullHex(wData[0]);
+           printFullHex(wData[1]);
            Serial.println();  
            smi.read(phyaddrHB, phyaddrLB, rData); //this function reads the number from the external eeprom
            Serial.print("after writing, the register value is ");
            for (i=0; i<2; i++) {
-             print0(rData[i]);
+             printFullHex(rData[i]);
            }
            Serial.println();
            Serial.println();
@@ -134,7 +134,7 @@ int readSerialData(int target[], int arraySize) {
    }
 }
 
-void print0(byte target) {
+void printFullHex(byte target) {
   if (target < 16) {
     Serial.print("0");
   }
